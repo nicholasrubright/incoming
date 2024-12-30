@@ -62,7 +62,7 @@ export default function AllocationCard({
         <div className="space-y-2">
           <div className="flex justify-between">
             <span className="text-sm text-gray-600">Allocation</span>
-            <span className="text-sm font-medium">
+            <span className="text-xl font-medium">
               {allocation.percentage}%
             </span>
           </div>
