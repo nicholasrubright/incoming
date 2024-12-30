@@ -10,30 +10,10 @@ import {
   totalAllocatedAmountAtom,
   totalAllocatedAtom,
 } from "./stores/app";
-// import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import SummaryCard from "./components/summary-card";
 
 export default function App() {
-  // const [incomeInput, setIncomeInput] = useState(0);
-
-  // const data = {
-  //   income: 5000,
-  //   allocations: [
-  //     {
-  //       name: "Savings",
-  //       percentage: 10,
-  //     },
-  //     {
-  //       name: "Checking",
-  //       percentage: 70,
-  //     },
-  //     {
-  //       name: "HYSA",
-  //       percentage: 20,
-  //     },
-  //   ],
-  // };
-
   const totalAllocated = useAtomValue(totalAllocatedAtom);
   const remainingAllocations = useAtomValue(remainingAllocationsAtom);
   const totalAllocatedAmount = useAtomValue(totalAllocatedAmountAtom);
@@ -44,10 +24,10 @@ export default function App() {
   return (
     <div className="container mx-auto p-6 max-w-4xl">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold mb-4">Incoming</h1>
+        <h1 className="text-4xl font-bold mb-4">Incoming</h1>
         <div className="flex gap-4 items-end">
           <div className="flex-1">
-            <label className="block text-sm font-medium mb-2">
+            <label className="block text-lg font-medium mb-2">
               Monthly Income
             </label>
             <Input
@@ -84,20 +64,14 @@ export default function App() {
         Add Allocation
       </Button>
 
-      <div className="mt-8 p-4 bg-secondary text-secondary-foreground rounded-lg">
-        <div className="flex justify-between items-center">
-          <div>
-            <p className="text-sm">Allocated</p>
-            <p className="text-xl font-semibold">{totalAllocated}%</p>
-          </div>
-          <div>
-            <p className="text-sm">Remaining</p>
-            <p className="text-xl font-semibold">{remainingAllocations}%</p>
-          </div>
-          <div>
-            <p className="text-sm">Total Allocated</p>
-            <p className="text-xl font-semibold">${totalAllocatedAmount}</p>
-          </div>
+      <div className="mt-8">
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <SummaryCard title="Allocated" content={`${totalAllocated}%`} />
+          <SummaryCard title="Remaining" content={`${remainingAllocations}%`} />
+          <SummaryCard
+            title="Total Allocated Amonut"
+            content={`$${totalAllocatedAmount}`}
+          />
         </div>
       </div>
     </div>
