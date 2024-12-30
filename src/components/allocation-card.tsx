@@ -1,10 +1,11 @@
 import { Slider } from "./ui/slider";
 import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
-import { Input } from "./ui/input";
 import { Allocation } from "@/types";
 import { PrimitiveAtom, useAtom, useAtomValue } from "jotai";
 import { monthlyIncomeAtom } from "@/stores/app";
 import { useMemo } from "react";
+import EasyEdit from "react-easy-edit";
+import { Input } from "./ui/input";
 
 interface AllocationCardProps {
   allocationAtom: PrimitiveAtom<Allocation>;
@@ -21,54 +22,62 @@ export default function AllocationCard({
   }, [monthlyIncome, allocation.percentage]);
 
   return (
-    <Card>
-      <CardHeader className="pb-4">
-        <CardTitle className="text-lg flex justify-between items-center">
-          <Input
-            className="w-40 text-lg font-semibold"
-            placeholder="Allocation Name"
-            value={allocation.name}
-            onChange={(e) =>
+    <Card className="shadow-lg">
+      <CardHeader className="pb-10">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <CardTitle className="text-2xl font-medium">
+              <EasyEdit
+                saveOnBlur
+                placeholder="Click here to name"
+                editComponent={
+                  <Input
+                    autoFocus
+                    className="text-lg"
+                    onChange={(e) =>
+                      setAllocation((oldValue) => ({
+                        ...oldValue,
+                        name: e.target.value,
+                      }))
+                    }
+                  />
+                }
+                type="text"
+                onSave={(e) =>
+                  setAllocation((oldValue) => ({
+                    ...oldValue,
+                    name: e.target.value,
+                  }))
+                }
+                value={allocation.name}
+              />
+            </CardTitle>
+          </div>
+          <span className="text-3xl font-bold text-pretty">
+            ${allocationAmount}
+          </span>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-2">
+          <div className="flex justify-between">
+            <span className="text-sm text-gray-600">Allocation</span>
+            <span className="text-sm font-medium">
+              {allocation.percentage}%
+            </span>
+          </div>
+          <Slider
+            value={[allocation.percentage]}
+            max={100}
+            step={1}
+            className="cursor-pointer"
+            onValueChange={(e) =>
               setAllocation((oldValue) => ({
                 ...oldValue,
-                name: e.target.value,
+                percentage: e[0],
               }))
             }
           />
-          <span className="text-2xl">${allocationAmount}</span>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          <div className="flex items-center gap-4">
-            <Slider
-              //defaultValue={[allocation.percentage]}
-              value={[allocation.percentage]}
-              onValueChange={(e) =>
-                setAllocation((oldValue) => ({
-                  ...oldValue,
-                  percentage: e[0],
-                }))
-              }
-              max={100}
-              step={1}
-              className="flex-1"
-            />
-            <div className="flex items-center gap-1">
-              <Input
-                type="number"
-                value={allocation.percentage}
-                onChange={(e) =>
-                  setAllocation((oldValue) => ({
-                    ...oldValue,
-                    percentage: e.target.valueAsNumber,
-                  }))
-                }
-                className="w-16 text-right"
-              />
-              <span>%</span>
-            </div>
-          </div>
         </div>
       </CardContent>
     </Card>
