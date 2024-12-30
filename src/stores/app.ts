@@ -1,6 +1,6 @@
 import type { Allocation, Income } from "@/types";
 import { atom } from "jotai";
-import { splitAtom } from "jotai/utils";
+import { splitAtom, atomWithStorage } from "jotai/utils";
 import { focusAtom } from "jotai-optics";
 
 interface AppData {
@@ -13,7 +13,10 @@ const initialState: AppData = {
   allocations: [],
 };
 
-export const appDataAtom = atom<AppData>(initialState);
+export const appDataAtom = atomWithStorage<AppData>(
+  "incoming-storage",
+  initialState
+);
 
 export const monthlyIncomeAtom = focusAtom(appDataAtom, (optic) =>
   optic.prop("monthlyIncome")
@@ -45,42 +48,14 @@ export const totalAllocatedAmountAtom = atom<number>((get) => {
   );
 });
 
-// export const allocationAtom = atom<Allocation[]>([]);
+export const totalAllocatedColorAtom = atom<string>((get) => {
+  const totalAllocated = get(totalAllocatedAtom);
 
-// export const addAllocationAtom = atom(
-//   null,
-//   (get, set, newAllocation: Allocation) => {
-//     set(allocationAtom, [...get(allocationAtom), newAllocation]);
-//   }
-// );
+  if (totalAllocated === 100) {
+    return "text-green-500";
+  } else if (totalAllocated > 100) {
+    return "text-red-500";
+  }
 
-// export const updateAllocationAtom = atom(
-//   null,
-//   (get, set, updateAllocation: Allocation) => {
-//     set(
-//       allocationAtom,
-//       get(allocationAtom).map((all) =>
-//         all.id === updateAllocation.id ? { ...all, ...updateAllocation } : all
-//       )
-//     );
-//   }
-// );
-
-// export const totalAllocatedAtom = atom<number>((get) => {
-//   const allocations = get(allocationAtom);
-//   return allocations.reduce((acc, val) => acc + val.percentage, 0);
-// });
-
-// export const remainingAllocationsAtom = atom<number>((get) => {
-//   const totalAllocated = get(totalAllocatedAtom);
-//   return 100 - totalAllocated;
-// });
-
-// export const totalAllocatedAmountAtom = atom<number>((get) => {
-//   const allocations = get(allocationAtom);
-//   const monthlyIncome = get(monthlyIncomeAtom);
-//   return allocations.reduce(
-//     (acc, val) => acc + monthlyIncome * (val.percentage / 100),
-//     0
-//   );
-// });
+  return "";
+});

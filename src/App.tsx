@@ -12,6 +12,7 @@ import {
 } from "./stores/app";
 import { v4 as uuidv4 } from "uuid";
 import SummaryCard from "./components/summary-card";
+import SettingsOption from "./components/settings-dialog";
 
 export default function App() {
   const totalAllocated = useAtomValue(totalAllocatedAtom);
@@ -24,7 +25,10 @@ export default function App() {
   return (
     <div className="container mx-auto p-6 max-w-4xl">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4">Incoming</h1>
+        <div className="flex flex-row justify-between">
+          <h1 className="text-4xl font-bold mb-4">Incoming</h1>
+          <SettingsOption />
+        </div>
         <div className="flex gap-4 items-end">
           <div className="flex-1">
             <label className="block text-lg font-medium mb-2">
@@ -40,13 +44,12 @@ export default function App() {
               }
             />
           </div>
-          <Button className="mb-0.5">Set Income</Button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-        {allocationAtoms.map((all) => {
-          return <AllocationCard allocationAtom={all} />;
+        {allocationAtoms.map((all, index) => {
+          return <AllocationCard key={index} allocationAtom={all} />;
         })}
       </div>
 
