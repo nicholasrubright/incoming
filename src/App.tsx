@@ -2,43 +2,44 @@ import { Plus } from "lucide-react";
 import { Button } from "./components/ui/button";
 import { Input } from "./components/ui/input";
 import AllocationCard from "./components/allocation-card";
-import { useAtom } from "jotai";
-import { allocationAtom, monthlyIncomeAtom } from "./stores/app";
-import { useState } from "react";
+import { useAtom, useAtomValue } from "jotai";
+import {
+  allocationAtomsAtom,
+  monthlyIncomeAtom,
+  remainingAllocationsAtom,
+  totalAllocatedAmountAtom,
+  totalAllocatedAtom,
+} from "./stores/app";
+// import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 export default function App() {
   // const [incomeInput, setIncomeInput] = useState(0);
 
-  const data = {
-    income: 5000,
-    allocations: [
-      {
-        name: "Savings",
-        percentage: 10,
-      },
-      {
-        name: "Checking",
-        percentage: 70,
-      },
-      {
-        name: "HYSA",
-        percentage: 20,
-      },
-    ],
-  };
+  // const data = {
+  //   income: 5000,
+  //   allocations: [
+  //     {
+  //       name: "Savings",
+  //       percentage: 10,
+  //     },
+  //     {
+  //       name: "Checking",
+  //       percentage: 70,
+  //     },
+  //     {
+  //       name: "HYSA",
+  //       percentage: 20,
+  //     },
+  //   ],
+  // };
+
+  const totalAllocated = useAtomValue(totalAllocatedAtom);
+  const remainingAllocations = useAtomValue(remainingAllocationsAtom);
+  const totalAllocatedAmount = useAtomValue(totalAllocatedAmountAtom);
 
   const [monthlyIncome, setMonthlyIncome] = useAtom(monthlyIncomeAtom);
-  const [allocations, setAllocations] = useAtom(allocationAtom);
-
-  const handleAddAllocation = () => {
-    setAllocations((allocations) => [
-      ...allocations,
-      {
-        name: "",
-        percentage: 0,
-      },
-    ]);
-  };
+  const [allocationAtoms, dispatch] = useAtom(allocationAtomsAtom);
 
   return (
     <div className="container mx-auto p-6 max-w-4xl">
@@ -64,17 +65,20 @@ export default function App() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-        {allocations.map((all) => {
-          return (
-            <AllocationCard allocation={all} monthlyIncome={monthlyIncome} />
-          );
+        {allocationAtoms.map((all) => {
+          return <AllocationCard allocationAtom={all} />;
         })}
       </div>
 
       <Button
         className="w-full md:w-auto"
         disabled={!(monthlyIncome > 0)}
-        onClick={() => handleAddAllocation()}
+        onClick={() =>
+          dispatch({
+            type: "insert",
+            value: { id: uuidv4(), name: "", percentage: 0 },
+          })
+        }
       >
         <Plus className="mr-2 h-4 w-4" />
         Add Allocation
@@ -84,27 +88,15 @@ export default function App() {
         <div className="flex justify-between items-center">
           <div>
             <p className="text-sm">Allocated</p>
-            <p className="text-xl font-semibold">
-              {data.allocations.reduce((acc, val) => acc + val.percentage, 0)}%
-            </p>
+            <p className="text-xl font-semibold">{totalAllocated}%</p>
           </div>
           <div>
             <p className="text-sm">Remaining</p>
-            <p className="text-xl font-semibold">
-              {100 -
-                data.allocations.reduce((acc, val) => acc + val.percentage, 0)}
-              %
-            </p>
+            <p className="text-xl font-semibold">{remainingAllocations}%</p>
           </div>
           <div>
             <p className="text-sm">Total Allocated</p>
-            <p className="text-xl font-semibold">
-              $
-              {data.allocations.reduce(
-                (acc, val) => acc + data.income * (val.percentage / 100),
-                0
-              )}
-            </p>
+            <p className="text-xl font-semibold">${totalAllocatedAmount}</p>
           </div>
         </div>
       </div>

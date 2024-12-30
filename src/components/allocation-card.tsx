@@ -2,19 +2,23 @@ import { Slider } from "./ui/slider";
 import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
 import { Input } from "./ui/input";
 import { Allocation } from "@/types";
+import { PrimitiveAtom, useAtom, useAtomValue } from "jotai";
+import { monthlyIncomeAtom } from "@/stores/app";
+import { useMemo } from "react";
 
 interface AllocationCardProps {
-  monthlyIncome: number;
-  allocation: Allocation;
+  allocationAtom: PrimitiveAtom<Allocation>;
 }
 
 export default function AllocationCard({
-  monthlyIncome,
-  allocation,
+  allocationAtom,
 }: AllocationCardProps) {
-  const { name, percentage } = allocation;
+  const [allocation, setAllocation] = useAtom(allocationAtom);
+  const monthlyIncome = useAtomValue(monthlyIncomeAtom);
 
-  const allocationAmount: number = monthlyIncome * (percentage / 100);
+  const allocationAmount = useMemo(() => {
+    return Math.round(monthlyIncome * (allocation.percentage / 100));
+  }, [monthlyIncome, allocation.percentage]);
 
   return (
     <Card>
@@ -23,7 +27,13 @@ export default function AllocationCard({
           <Input
             className="w-40 text-lg font-semibold"
             placeholder="Allocation Name"
-            value={name}
+            value={allocation.name}
+            onChange={(e) =>
+              setAllocation((oldValue) => ({
+                ...oldValue,
+                name: e.target.value,
+              }))
+            }
           />
           <span className="text-2xl">${allocationAmount}</span>
         </CardTitle>
@@ -32,7 +42,14 @@ export default function AllocationCard({
         <div className="space-y-4">
           <div className="flex items-center gap-4">
             <Slider
-              defaultValue={[percentage]}
+              //defaultValue={[allocation.percentage]}
+              value={[allocation.percentage]}
+              onValueChange={(e) =>
+                setAllocation((oldValue) => ({
+                  ...oldValue,
+                  percentage: e[0],
+                }))
+              }
               max={100}
               step={1}
               className="flex-1"
@@ -40,7 +57,13 @@ export default function AllocationCard({
             <div className="flex items-center gap-1">
               <Input
                 type="number"
-                value={percentage}
+                value={allocation.percentage}
+                onChange={(e) =>
+                  setAllocation((oldValue) => ({
+                    ...oldValue,
+                    percentage: e.target.valueAsNumber,
+                  }))
+                }
                 className="w-16 text-right"
               />
               <span>%</span>
