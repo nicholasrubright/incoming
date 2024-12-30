@@ -1,4 +1,4 @@
-import type { Allocation, Income } from "@/types";
+import type { Allocation, AllocationChartItem, Income } from "@/types";
 import { atom } from "jotai";
 import { splitAtom, atomWithStorage } from "jotai/utils";
 import { focusAtom } from "jotai-optics";
@@ -58,4 +58,28 @@ export const totalAllocatedColorAtom = atom<string>((get) => {
   }
 
   return "";
+});
+
+export const allocationChartDataAtom = atom<AllocationChartItem[]>((get) => {
+  const MONTHS_IN_ADVANCED = 12;
+
+  const allocations = get(allocationsAtom);
+  const monthlyIncome = get(monthlyIncomeAtom);
+
+  //const allocationAmount = Math.round(monthlyIncome * (allocation.percentage / 100))
+
+  return allocations.map((all) => {
+    const allocationAmount = Math.round(monthlyIncome * (all.percentage / 100));
+
+    const initialData: AllocationChartItem[] = Array(MONTHS_IN_ADVANCED).fill({
+      month: 0,
+      amount: 0,
+    });
+
+    // return initialData.reduce((acc, curr) => {
+    //   return {
+    //     month: acc.month + 1, amount:
+    //   }
+    // }, { month: 0, amount: 0})
+  });
 });

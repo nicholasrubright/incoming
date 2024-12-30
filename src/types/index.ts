@@ -7,3 +7,8 @@ export type Allocation = {
 };
 
 export type Income = number;
+
+export type AllocationChartItem = {
+  month: number;
+  amount: number;
+};
