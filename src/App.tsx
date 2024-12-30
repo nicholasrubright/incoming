@@ -26,7 +26,7 @@ export default function App() {
     <div className="container mx-auto p-6 max-w-4xl">
       <div className="mb-8">
         <div className="flex flex-row justify-between">
-          <h1 className="text-4xl font-bold mb-4">Incoming</h1>
+          <h1 className="text-4xl font-bold mb-4">IncomeSplit</h1>
           <SettingsOption />
         </div>
         <div className="flex gap-4 items-end">
