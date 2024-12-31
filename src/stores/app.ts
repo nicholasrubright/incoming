@@ -70,20 +70,20 @@ export const allocationChartConfigAtom = atom<AllocationChartConfig>((get) => {
 
   const chartConfig: AllocationChartConfig = {};
 
+  chartConfig["other"] = {
+    label: "Other",
+    color: `hsl(var(--chart-1))`,
+  };
+
   allocations
     .filter((all) => all.percentage > 0)
     .sort((a, b) => a.percentage - b.percentage)
     .forEach((all, index) => {
       chartConfig[all.name] = {
         label: all.name,
-        color: `hsl(var(--chart-${index + 1}))`,
+        color: `hsl(var(--chart-${index + 2}))`,
       };
     });
-
-  chartConfig["other"] = {
-    label: "Other",
-    color: `hsl(var(--chart-${allocations.length + 1}))`,
-  };
 
   return chartConfig;
 });
