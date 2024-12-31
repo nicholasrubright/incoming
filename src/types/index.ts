@@ -7,3 +7,16 @@ export type Allocation = {
 };
 
 export type Income = number;
+
+export type AllocationChartConfig = {
+  [key: string]: {
+    label: string;
+    color: string;
+  };
+};
+
+export type AllocationDataPoint = {
+  allocation: string;
+  percentage: number;
+  fill: string;
+};

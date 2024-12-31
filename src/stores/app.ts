@@ -1,4 +1,9 @@
-import type { Allocation, Income } from "@/types";
+import type {
+  Allocation,
+  AllocationChartConfig,
+  AllocationDataPoint,
+  Income,
+} from "@/types";
 import { atom } from "jotai";
 import { splitAtom, atomWithStorage } from "jotai/utils";
 import { focusAtom } from "jotai-optics";
@@ -60,6 +65,51 @@ export const totalAllocatedColorAtom = atom<string>((get) => {
   return "";
 });
 
+export const allocationChartConfigAtom = atom<AllocationChartConfig>((get) => {
+  const allocations = get(allocationsAtom);
+
+  const chartConfig: AllocationChartConfig = {};
+
+  allocations
+    .sort((a, b) => a.percentage - b.percentage)
+    .forEach((all, index) => {
+      chartConfig[all.name] = {
+        label: all.name,
+        color: `hsl(var(--chart-${index + 1}))`,
+      };
+    });
+
+  chartConfig["other"] = {
+    label: "Other",
+    color: `hsl(var(--chart-${allocations.length + 1}))`,
+  };
+
+  return chartConfig;
+});
+
+export const allocationChartDataAtom = atom<AllocationDataPoint[]>((get) => {
+  const allocations = get(allocationsAtom);
+
+  const dataPoints = allocations
+    .sort((a, b) => a.percentage - b.percentage)
+    .map((all) => {
+      return {
+        allocation: all.name,
+        percentage: all.percentage,
+        fill: `var(--color-${all.name})`,
+      };
+    });
+
+  const remainingAllocations = get(remainingAllocationsAtom);
+
+  dataPoints.push({
+    allocation: "other",
+    percentage: remainingAllocations,
+    fill: `var(--color-other)`,
+  });
+
+  return dataPoints;
+});
 
 // export const allocationChartDataAtom = atom<AllocationChartDataPoint[]>(
 //   (get) => {

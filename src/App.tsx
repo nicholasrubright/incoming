@@ -58,7 +58,9 @@ export default function App() {
         </div>
       </div>
       <div className="mt-8 space-y-8">
-        {allocationAtoms.length > 0 && <AllocationDonutChart />}
+        {allocationAtoms.length > 0 && totalAllocated > 0 && (
+          <AllocationDonutChart />
+        )}
       </div>
     </div>
   );
