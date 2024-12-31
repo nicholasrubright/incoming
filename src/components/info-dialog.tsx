@@ -79,10 +79,6 @@ function InfoDialog({ isOpen, setIsOpen }: InfoDialogProps) {
             </p>
           </div>
         </div>
-
-        {/* <DialogFooter>
-            <Button type="submit">Save changes</Button>
-          </DialogFooter> */}
       </DialogContent>
     </Dialog>
   );

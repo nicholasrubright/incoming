@@ -57,9 +57,6 @@ function SettingsDialog({ isOpen, setIsOpen }: SettingsDialogProps) {
             </Button>
           </div>
         </div>
-        {/* <DialogFooter>
-          <Button type="submit">Save changes</Button>
-        </DialogFooter> */}
       </DialogContent>
     </Dialog>
   );

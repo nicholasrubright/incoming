@@ -112,36 +112,3 @@ export const allocationChartDataAtom = atom<AllocationDataPoint[]>((get) => {
 
   return dataPoints;
 });
-
-// export const allocationChartDataAtom = atom<AllocationChartDataPoint[]>(
-//   (get) => {
-//     const MONTHS_IN_ADVANCED = 12;
-
-//     const allocations = get(allocationsAtom);
-//     const monthlyIncome = get(monthlyIncomeAtom);
-
-//     return allocations.flatMap((all) => {
-//       if (all.percentage === 0) {
-//         return [];
-//       }
-
-//       const allocationAmount = Math.round(
-//         monthlyIncome * (all.percentage / 100)
-//       );
-
-//       const initialData = Array(MONTHS_IN_ADVANCED).fill({
-//         month: 0,
-//         amount: 0,
-//       });
-
-//       return initialData.map((item, index) => {
-//         return {
-//           ...item,
-//           name: all.name,
-//           month: index + 1,
-//           amount: allocationAmount * (index + 1),
-//         };
-//       });
-//     });
-//   }
-// );
