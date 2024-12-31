@@ -22,7 +22,6 @@ export function AllocationDonutChart() {
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
         <CardTitle>Allocation - Donut</CardTitle>
-        {/* <CardDescription>January - June 2024</CardDescription> */}
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer

@@ -11,6 +11,7 @@ import SummaryCard from "./components/summary-card";
 import SettingsOption from "./components/settings-dialog";
 import AllocationList from "./components/allocation-list";
 import { AllocationDonutChart } from "./components/allocation-chart";
+import InfoOption from "./components/info-dialog";
 
 export default function App() {
   const totalAllocated = useAtomValue(totalAllocatedAtom);
@@ -25,7 +26,10 @@ export default function App() {
       <div className="mb-8">
         <div className="flex flex-row justify-between">
           <h1 className="text-4xl font-bold mb-4">IncomeSplit</h1>
-          <SettingsOption />
+          <div className="flex flex-row gap-2">
+            <SettingsOption />
+            <InfoOption />
+          </div>
         </div>
         <div className="flex gap-4 items-end">
           <div className="flex-1">
