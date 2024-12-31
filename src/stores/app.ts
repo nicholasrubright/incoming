@@ -60,26 +60,36 @@ export const totalAllocatedColorAtom = atom<string>((get) => {
   return "";
 });
 
-// export const allocationChartDataAtom = atom<AllocationChartItem[]>((get) => {
-//   const MONTHS_IN_ADVANCED = 12;
 
-//   const allocations = get(allocationsAtom);
-//   const monthlyIncome = get(monthlyIncomeAtom);
+// export const allocationChartDataAtom = atom<AllocationChartDataPoint[]>(
+//   (get) => {
+//     const MONTHS_IN_ADVANCED = 12;
 
-//   //const allocationAmount = Math.round(monthlyIncome * (allocation.percentage / 100))
+//     const allocations = get(allocationsAtom);
+//     const monthlyIncome = get(monthlyIncomeAtom);
 
-//   return allocations.map((all) => {
-//     const allocationAmount = Math.round(monthlyIncome * (all.percentage / 100));
+//     return allocations.flatMap((all) => {
+//       if (all.percentage === 0) {
+//         return [];
+//       }
 
-//     const initialData: AllocationChartItem[] = Array(MONTHS_IN_ADVANCED).fill({
-//       month: 0,
-//       amount: 0,
+//       const allocationAmount = Math.round(
+//         monthlyIncome * (all.percentage / 100)
+//       );
+
+//       const initialData = Array(MONTHS_IN_ADVANCED).fill({
+//         month: 0,
+//         amount: 0,
+//       });
+
+//       return initialData.map((item, index) => {
+//         return {
+//           ...item,
+//           name: all.name,
+//           month: index + 1,
+//           amount: allocationAmount * (index + 1),
+//         };
+//       });
 //     });
-
-//     // return initialData.reduce((acc, curr) => {
-//     //   return {
-//     //     month: acc.month + 1, amount:
-//     //   }
-//     // }, { month: 0, amount: 0})
-//   });
-// });
+//   }
+// );

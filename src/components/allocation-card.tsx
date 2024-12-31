@@ -6,13 +6,19 @@ import { monthlyIncomeAtom } from "@/stores/app";
 import { useMemo } from "react";
 import EasyEdit from "react-easy-edit";
 import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { Trash } from "lucide-react";
 
 interface AllocationCardProps {
   allocationAtom: PrimitiveAtom<Allocation>;
+  canDelete: boolean;
+  handleOnDelete: (atom: PrimitiveAtom<Allocation>) => void;
 }
 
 export default function AllocationCard({
   allocationAtom,
+  canDelete,
+  handleOnDelete,
 }: AllocationCardProps) {
   const [allocation, setAllocation] = useAtom(allocationAtom);
   const monthlyIncome = useAtomValue(monthlyIncomeAtom);
@@ -23,7 +29,18 @@ export default function AllocationCard({
 
   return (
     <Card className="shadow-lg">
-      <CardHeader className="pb-10">
+      <CardHeader className="pb-10 space-y-5">
+        {canDelete && (
+          <div className="flex justify-end">
+            <Button
+              variant="destructive"
+              onClick={() => handleOnDelete(allocationAtom)}
+              size="sm"
+            >
+              <Trash />
+            </Button>
+          </div>
+        )}
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
             <CardTitle className="text-2xl font-medium">
@@ -61,7 +78,7 @@ export default function AllocationCard({
       <CardContent>
         <div className="space-y-2">
           <div className="flex justify-between">
-            <span className="text-sm text-gray-600">Allocation</span>
+            <span className="text-sm text-card-foreground">Allocation</span>
             <span className="text-xl font-medium">
               {allocation.percentage}%
             </span>

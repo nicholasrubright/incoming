@@ -1,7 +1,4 @@
-import { Plus } from "lucide-react";
-import { Button } from "./components/ui/button";
 import { Input } from "./components/ui/input";
-import AllocationCard from "./components/allocation-card";
 import { useAtom, useAtomValue } from "jotai";
 import {
   allocationAtomsAtom,
@@ -10,9 +7,10 @@ import {
   totalAllocatedAmountAtom,
   totalAllocatedAtom,
 } from "./stores/app";
-import { v4 as uuidv4 } from "uuid";
 import SummaryCard from "./components/summary-card";
 import SettingsOption from "./components/settings-dialog";
+import AllocationList from "./components/allocation-list";
+import { AllocationDonutChart } from "./components/allocation-chart";
 
 export default function App() {
   const totalAllocated = useAtomValue(totalAllocatedAtom);
@@ -20,7 +18,7 @@ export default function App() {
   const totalAllocatedAmount = useAtomValue(totalAllocatedAmountAtom);
 
   const [monthlyIncome, setMonthlyIncome] = useAtom(monthlyIncomeAtom);
-  const [allocationAtoms, dispatch] = useAtom(allocationAtomsAtom);
+  const allocationAtoms = useAtomValue(allocationAtomsAtom);
 
   return (
     <div className="container mx-auto p-6 max-w-4xl">
@@ -47,25 +45,7 @@ export default function App() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-        {allocationAtoms.map((all, index) => {
-          return <AllocationCard key={index} allocationAtom={all} />;
-        })}
-      </div>
-
-      <Button
-        className="w-full md:w-auto"
-        disabled={!(monthlyIncome > 0)}
-        onClick={() =>
-          dispatch({
-            type: "insert",
-            value: { id: uuidv4(), name: "", percentage: 0 },
-          })
-        }
-      >
-        <Plus className="mr-2 h-4 w-4" />
-        Add Allocation
-      </Button>
+      <AllocationList />
 
       <div className="mt-8">
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -76,6 +56,9 @@ export default function App() {
             content={`$${totalAllocatedAmount}`}
           />
         </div>
+      </div>
+      <div className="mt-8 space-y-8">
+        {allocationAtoms.length > 0 && <AllocationDonutChart />}
       </div>
     </div>
   );
