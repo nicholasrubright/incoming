@@ -71,6 +71,7 @@ export const allocationChartConfigAtom = atom<AllocationChartConfig>((get) => {
   const chartConfig: AllocationChartConfig = {};
 
   allocations
+    .filter((all) => all.percentage > 0)
     .sort((a, b) => a.percentage - b.percentage)
     .forEach((all, index) => {
       chartConfig[all.name] = {
@@ -91,6 +92,7 @@ export const allocationChartDataAtom = atom<AllocationDataPoint[]>((get) => {
   const allocations = get(allocationsAtom);
 
   const dataPoints = allocations
+    .filter((all) => all.percentage > 0)
     .sort((a, b) => a.percentage - b.percentage)
     .map((all) => {
       return {
